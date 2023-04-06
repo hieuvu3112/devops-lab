@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: labk8s
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: labk8s
+  template:
+    metadata:
+      labels:
+        app: labk8s
+    spec:
+      containers:
+        - name: labk8s
+          image: hieuvt3112/labdocker:v1
+          ports:
+            - containerPort: 8080
+          volumeMounts:
+            - name: labk8s-pvc
+              mountPath: /data
+      volumes:
+        - name: labk8s-pvc
+          persistentVolumeClaim:
+            claimName: labk8s-pvc
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 1
+      maxSurge: 1
